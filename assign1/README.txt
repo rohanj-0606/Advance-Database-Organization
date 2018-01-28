@@ -1,8 +1,7 @@
 Programming Assignment 1 - Storage Manager
 
-Team Members :PVK Chaitanya(A20378279)
-              Rohan Jain(A20378201)
-              Govind Maheshwari(A20376906)
+Team Members :Rohan Jain(A20378201)
+              
 
 Contents :
 1)Running Instruction
