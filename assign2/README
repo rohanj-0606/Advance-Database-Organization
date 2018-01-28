@@ -1,0 +1,30 @@
+The Buffer manager has 'N' slots which is defined at the start of buffer pool.
+
+For each slot we maintain a header called "BufferHeader" (defined in buffer_mgr.h).
+The Bufferheader for each slot holds the information
+		1. The buffId which is unique positive integer given to each of the buffer slots.
+		2. The pageNumber that the slot holds.
+		3. Boolean flag to indicate if the pageFrame is dirty.
+		4. Booolean flag to indicate if the the slot is pinned.
+
+The data structure BM_MgmtData holds the array of "Bufferheaders".
+In addition to this BM_MgmtData has other data, The imporatant among them are
+		1. buffTable, a Hashtable that maps the pageNumber requested to it's buffer slot
+		2. fixCout, a pointer to array that tells how many clients are accessing the given pageFrame/ slot.
+		3. strategyData, this holds information that is needed for Page replacement strategy.
+		4. freeBuffList, a Linked List that holds the free buffer slots in the pool
+
+Two page replacement strategies are implemented:
+1. FIFO:
+  ------
+  	For FIFO, a Linkedlist (referenced by strategyData) of buffer id is maintained. 
+  	
+  	Ever time an empty buffer is used, the bufferId is added to the end of the list.
+  	
+  	When the buffer is full and we need a page to replace, we pick the head node. 
+  		If the head node is pinned, we find the next node in the list that is  not pinned and append it to the end of the list.
+2. LRU:
+  -----
+  	In LRU we do the same steps of FIFO. In addition an extra step is added.
+
+  	Every time there is buffer hit (i.e., the requested pageNumber is in the buffer) we delete the bufferId from the Linkedlist (referenced by strategyData) and append it at the end

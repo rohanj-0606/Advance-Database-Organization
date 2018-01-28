@@ -1,0 +1,25 @@
+The code implements a B+Tree:
+-----------------------------
+The nodes in B+tree are differentiated in
+1. Leaf Nodes
+2. NonLeaf Nodes
+
+Each Node in tree corresponds to 1 page on disk. The node size must fit with in 1 page, if not we throw an error.
+
+Both type of nodes start with a header given by BtreePageHeader.
+
+If leaf node, the header is followed by a series of BT_LeafRecord's.
+Each BT_LeafRecord corresponds to 1 record/entry in the node.
+
+If non-Leaf node, the header is followed by a series of BT_NonLeafRecord's.
+Each BT_NonLeafRecord corresponds to 1 record/entry in the node.
+
+In addition to this we maintain BtreeMgmtData which holds the additional metadata corresponding to B+tree
+
+The necessary description of each function and it's usage is documented in the code.
+
+Extra testCases:
+----------------
+void additionalInsertFindTest(); --> Implements test for Insert and find for node size of 3 and 7 records.
+
+void additionalScanTest();       --> Implements test for Scans for node size of 3 and 20 records.

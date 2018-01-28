@@ -1,0 +1,42 @@
+      RM_TablePageHeader *tHeader  = (RM_TablePageHeader*) pHandle->data;
+       while ((tHeader->NextHeadBlockNum != NO_NEXT_PAGE)){
+           if(pHandle->data[0] == '\0')
+               break;
+           currPage = tHeader->NextHeadBlockNum;
+           unpinPage(buffPool,pHandle);
+           pinPage(buffPool, pHandle, currPage);
+           tHeader  = (RM_TablePageHeader*) pHandle->data;
+
+       }
+
+    // If page is empty, write to the page
+    if (pHandle->data[0] == '\0'){
+        tHeader->NextHeadBlockNum = NO_NEXT_PAGE;
+        tHeader->OffsetFreeSpace = sizeof(RM_TablePageHeader);
+        sprintf(pHandle->data + tHeader->OffsetFreeSpace ,"%d %s", offset, tempBuff);
+        tHeader->OffsetFreeSpace += offset;
+    }
+    else{
+        // If page is not empty, check if page has enough space
+        if((PAGE_SIZE - tHeader->OffsetFreeSpace)>0){
+            sprintf((pHandle->data)+tHeader->OffsetFreeSpace,
+                    "%d %s",offset,tempBuff);
+            tHeader->OffsetFreeSpace += offset;
+        } else{
+            //new pageNum store the data
+            int newBlockNum = getNewPagePos(buffPool);
+
+            // Update previous page, Mark dirty, unpin
+            tHeader->NextHeadBlockNum = newBlockNum;
+            markDirty(buffPool, pHandle);
+            unpinPage(buffPool, pHandle);
+
+            // Update the new Page
+            pinPage(buffPool, pHandle, newBlockNum);
+            tHeader->NextHeadBlockNum = NO_NEXT_PAGE;
+            tHeader->OffsetFreeSpace = sizeof(RM_TablePageHeader);
+            sprintf(pHandle->data + tHeader->OffsetFreeSpace ,"%d %s", offset, tempBuff);
+            tHeader->OffsetFreeSpace += offset;
+
+        }
+    }
