@@ -1,6 +1,6 @@
 # Advance-Database-Organization
 
-This C++ project involves the implementation of Storage Buffer, Record Manager and B++ Tree Index and focusing on database implementation, introducing some very important data structure, algorithm and techniques for database systems.
+This project involves the implementation of Storage Buffer, Record Manager and B++ Tree Index and focusing on database implementation, introducing some very important data structure, algorithm and techniques for database systems.
 
 Assignment 1 - Storage Manager: Implement a storage manager that allows read/writing of blocks to/from a file on disk
 
